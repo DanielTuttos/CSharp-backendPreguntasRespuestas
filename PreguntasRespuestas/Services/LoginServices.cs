@@ -1,4 +1,6 @@
-﻿using PreguntasRespuestas.Domain.IServices;
+﻿using PreguntasRespuestas.Domain.IRepositories;
+using PreguntasRespuestas.Domain.IServices;
+using PreguntasRespuestas.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,10 +10,15 @@ namespace PreguntasRespuestas.Services
 {
     public class LoginServices: ILoginServices
     {
-        public readonly ILoginServices _loginServices;
-        public LoginServices(ILoginServices loginservices)
+        public readonly ILoginRepository _loginRepository;
+        public LoginServices(ILoginRepository loginRepository)
         {
-            _loginServices = loginservices;
+            _loginRepository = loginRepository;
+        }
+
+        public async Task<Usuario> ValidateUser(Usuario usuario)
+        {
+            return await _loginRepository.ValidateUser(usuario);
         }
     }
 }

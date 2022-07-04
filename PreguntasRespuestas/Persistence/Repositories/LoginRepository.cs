@@ -1,4 +1,7 @@
-﻿using PreguntasRespuestas.Domain.IRepositories;
+﻿using Microsoft.EntityFrameworkCore;
+using PreguntasRespuestas.Domain.IRepositories;
+using PreguntasRespuestas.Domain.Models;
+using PreguntasRespuestas.Persistence.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,11 +11,18 @@ namespace PreguntasRespuestas.Persistence.Repositories
 {
     public class LoginRepository: ILoginRepository
     {
-        private readonly ILoginRepository _loginRepository;
+        private readonly AplicationDbContext _context;
 
-        public LoginRepository(ILoginRepository loginRepository)
+        public LoginRepository(AplicationDbContext context)
         {
-            _loginRepository = loginRepository;
+            _context = context;
+        }
+
+        public async Task<Usuario> ValidateUser(Usuario usuario)
+        {
+            var user = await _context.Usuarios.Where(x => x.NombreUsuario == usuario.NombreUsuario 
+            && x.Password == usuario.Password).FirstOrDefaultAsync();
+            return user;
         }
     }
 }
