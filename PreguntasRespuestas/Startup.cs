@@ -32,10 +32,15 @@ namespace PreguntasRespuestas
         {
             services.AddDbContext<AplicationDbContext>(options=>
                 options.UseMySql(Configuration.GetConnectionString("Conexion")));
-            services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             services.AddControllers();
+            
+            // services
             services.AddScoped<IUsuarioServices, UsuarioServices>();
+            services.AddScoped<ILoginServices, LoginServices>();
 
+            //repository
+            services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+            services.AddScoped<ILoginRepository, LoginRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

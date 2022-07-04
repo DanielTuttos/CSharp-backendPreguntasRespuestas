@@ -22,7 +22,7 @@ namespace PreguntasRespuestas.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Usuario usuario)
+        public async Task<IActionResult> CrearUsuario([FromBody] Usuario usuario)
         {
             try
             {
@@ -51,7 +51,13 @@ namespace PreguntasRespuestas.Controllers
             {
                 int idUsuario = 3;
                 string passwordEncriptado = Encriptar.EncriptarPassword(cambiarPassword.passwordAnterior);
-
+                var usuario = await _usuarioServices.ValidatePassword(idUsuario, passwordEncriptado);
+                if(usuario == null)
+                {
+                    return BadRequest(new { message = "La password es incorrecta" });
+                }
+                usuario.Password = Encriptar.EncriptarPassword(cambiarPassword.passwordNueva);
+                await _usuarioServices.UpdatePassword(usuario);
                 return Ok(new { message = "La password fue actualizada con exito" });
             }
             catch (Exception ex)
